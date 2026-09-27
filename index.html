@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>蜜源植物AI判定</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff8df;
+      text-align: center;
+      padding: 30px 15px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #d98b00;
+    }
+
+    .box {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    input {
+      margin: 20px 0;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    button {
+      background: #f2a900;
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="box">
+    <h1>🐝 蜜源植物AI判定</h1>
+
+    <p>植物の写真を選んでください</p>
+
+    <input
+      type="file"
+      id="imageInput"
+      accept="image/*"
+      capture="environment"
+    >
+
+    <img id="preview" style="display:none;">
+
+    <br><br>
+
+    <button onclick="identifyPlant()">
+      🌿 植物を判定する
+    </button>
+
+    <div id="result">
+      ここに判定結果が表示されます
+    </div>
+  </div>
+
+<script>
+
+const API_KEY = "ここには後で入れる";
+
+const imageInput = document.getElementById("imageInput");
+const preview = document.getElementById("preview");
+const result = document.getElementById("result");
+
+imageInput.addEventListener("change", function() {
+
+  const file = imageInput.files[0];
+
+  if (!file) return;
+
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+
+  result.textContent = "写真を読み込みました🌱";
+
+});
+
+async function identifyPlant() {
+
+  const file = imageInput.files[0];
+
+  if (!file) {
+    result.textContent = "まず植物の写真を選んでね📸";
+    return;
+  }
+
+  result.textContent = "🤖 AIが植物を判定中…";
+
+  const formData = new FormData();
+
+  formData.append("images", file);
+
+  try {
+
+    const response = await fetch(
+      `https://my-api.plantnet.org/v2/identify/all?api-key=${API_KEY}&lang=ja`,
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "APIエラー");
+    }
+
+    result.innerHTML = `
+      <h2>🌿 判定結果</h2>
+      <p><strong>${data.bestMatch}</strong></p>
+    `;
+
+  } catch (error) {
+
+    console.error(error);
+
+    result.textContent =
+      "判定に失敗しました。API設定を確認してみよう。";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
