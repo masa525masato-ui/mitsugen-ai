@@ -142,8 +142,8 @@ async function identifyPlant() {
 
     console.error(error);
 
-    result.textContent =
-      "判定に失敗しました。API設定を確認してみよう。";
+result.textContent =
+  "エラー: " + error.message;
 
   }
 
