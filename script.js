@@ -1,6 +1,6 @@
 // 【Pl@ntNetを使う場合のみ】my.plantnet.org で取得したAPIキーをここに1回だけ貼る(利用者の登録は不要)
 // claude.ai 上で公開して使う場合は不要です(Claudeの画像認識を使用)
-var PLANTNET_API_KEY='';
+var PLANTNET_API_KEY='2b101kNkWj7Y2UHUkVfXroADqe';
 
 // [学名の前方一致, 和名, 区分, 開花時期(日本)]  ※種レベルを属レベルより先に置く
 var NECTAR=[
